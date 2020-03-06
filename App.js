@@ -6,34 +6,52 @@
  * @flow
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
+  FlatList,
   View,
   Text,
-  StatusBar,
   TextInput,
   Button,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const App = () => {
+  const [enteredTask, setEnteredTask] = useState('');
+  const [tasks, setTasks] = useState([]);
 
-const App: () => React$Node = () => {
+  const taskInputHandler = enteredText => {
+    setEnteredTask(enteredText);
+  };
+
+  const addTaskHandler = () => {
+    setTasks(currentTasks => [
+      ...currentTasks,
+      {key: Math.random().toString(), value: enteredTask},
+    ]);
+  };
+
   return (
     <View style={styles.screen}>
       <Text>My Task List</Text>
       <View style={styles.inputbuttonview}>
-        <TextInput placeholder="Task item" style={styles.inputText} />
-        <Button title="ADD" style={styles.button} />
+        <TextInput
+          placeholder="Task item"
+          style={styles.inputText}
+          onChangeText={taskInputHandler}
+          value={enteredTask}
+        />
+        <Button title="ADD" style={styles.button} onPress={addTaskHandler} />
       </View>
+      <FlatList
+        keyExtractor={(item, index) => item.key}
+        data={tasks}
+        renderItem={itemData => (
+          <View style={styles.listItem}>
+            <Text>{itemData.item.value}</Text>
+          </View>
+        )}
+      />
     </View>
   );
 };
@@ -56,6 +74,13 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   button: {},
+  listItem: {
+    padding: 10,
+    margin: 1,
+    backgroundColor: 'grey',
+    borderColor: 'black',
+    borderBottomWidth: 1,
+  },
 });
 
 export default App;
