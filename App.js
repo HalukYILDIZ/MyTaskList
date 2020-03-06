@@ -55,9 +55,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 10,
   },
-  button: {
-    flex: 5,
-  },
+  button: {},
 });
 
 export default App;
